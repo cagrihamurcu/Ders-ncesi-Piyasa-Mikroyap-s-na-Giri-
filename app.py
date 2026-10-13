@@ -18,6 +18,8 @@ defaults = {
     "q1_done": False,
     "q2_done": False,
     "q3_done": False,
+    "q4_done": False,
+    "q5_done": False,
     "bonus_done": False,
 }
 for k, v in defaults.items():
@@ -74,8 +76,10 @@ tamamlanan = sum([
     st.session_state.q1_done,
     st.session_state.q2_done,
     st.session_state.q3_done,
+    st.session_state.q4_done,
+    st.session_state.q5_done,
 ])
-st.progress(tamamlanan / 3)
+st.progress(tamamlanan / 5)
 
 st.divider()
 
@@ -124,8 +128,8 @@ q1 = st.radio(
 
 if st.button("⚡ Hamleni Yap", key="check1", disabled=st.session_state.q1_done):
     if q1 == "Piyasa B":
-        bonus = dogru("q1_done", 25)
-        st.success(f"✅ Doğru! +25 puan" + (f" +{bonus} seri bonusu 🔥" if bonus else ""))
+        bonus = dogru("q1_done", 20)
+        st.success(f"✅ Doğru! +20 puan" + (f" +{bonus} seri bonusu 🔥" if bonus else ""))
         st.markdown(
             """
 Sığ piyasada karşı tarafta daha az emir vardır. Büyük bir piyasa emri mevcut emirleri daha hızlı tüketebilir.
@@ -195,8 +199,8 @@ q2b = st.radio(
 
 if st.button("🔍 Sonucu Aç", key="check2", disabled=st.session_state.q2_done):
     if q2a == "0,40 TL" and q2b == "İşlem maliyeti artabilir ve likidite azalabilir.":
-        bonus = dogru("q2_done", 30)
-        st.success(f"✅ İki adım da doğru! +30 puan" + (f" +{bonus} seri bonusu 🔥" if bonus else ""))
+        bonus = dogru("q2_done", 20)
+        st.success(f"✅ İki adım da doğru! +20 puan" + (f" +{bonus} seri bonusu 🔥" if bonus else ""))
         st.markdown(
             """
 **Spread = 100,20 − 99,80 = 0,40 TL**
@@ -259,8 +263,8 @@ q3 = st.radio(
 
 if st.button("🕵️ Vakayı Çöz", key="check3", disabled=st.session_state.q3_done):
     if q3 == "Likidite şoku yaşanmış olabilir.":
-        bonus = dogru("q3_done", 35)
-        st.success(f"✅ Vaka çözüldü! +35 puan" + (f" +{bonus} seri bonusu 🔥" if bonus else ""))
+        bonus = dogru("q3_done", 20)
+        st.success(f"✅ Vaka çözüldü! +20 puan" + (f" +{bonus} seri bonusu 🔥" if bonus else ""))
         st.markdown(
             """
 Şirket hakkında yeni bilgi olmadan büyük satış baskısı oluşması likidite şokuyla uyumludur.
@@ -276,12 +280,118 @@ Fiyatın daha sonra kısmen geri dönmesi, hareketin bir bölümünün geçici l
         st.error("❌ Fazla kesin yorum yaptın. 1 can kaybettin.")
         st.info("Fiyatın düşmesi tek başına bunun nedenini göstermez.")
 
+
+st.divider()
+
+# =================================================
+# GÖREV 4
+# =================================================
+st.header("⚖️ Seviye 4 — Limit mi, Piyasa mı?")
+
+with st.expander("📘 Kavram kartı", expanded=True):
+    st.markdown(
+        """
+**Limit emir:** Yatırımcı kabul edebileceği fiyat sınırını belirler.
+
+- Fiyat kontrolü daha yüksektir.
+- Ancak emir hiç gerçekleşmeyebilir veya kısmen gerçekleşebilir.
+
+**Piyasa emri:** Mevcut karşıt emirlerle mümkün olan fiyatlardan işlem yapmayı amaçlar.
+
+- Gerçekleşme olasılığı daha yüksektir.
+- Ancak gerçekleşme fiyatı önceden kesin değildir.
+
+**Temel fark:**  
+Limit emir daha fazla **fiyat kontrolü**, piyasa emri daha fazla **gerçekleşme olasılığı** sağlar.
+"""
+    )
+
+q4 = st.radio(
+    "Bir yatırımcı fiyat kontrolüne çok önem veriyor ve emrin hemen gerçekleşmesi şart değil. Hangi emir daha uygundur?",
+    [
+        "Limit emir",
+        "Piyasa emri"
+    ],
+    index=None,
+    key="game_q4"
+)
+
+if st.button("🎯 Emir Seçimini Kilitle", key="check4", disabled=st.session_state.q4_done):
+    if q4 == "Limit emir":
+        bonus = dogru("q4_done", 20)
+        st.success(f"✅ Doğru! +20 puan" + (f" +{bonus} seri bonusu 🔥" if bonus else ""))
+        st.markdown(
+            """
+**Neden?**  
+Limit emirde yatırımcı kabul edeceği fiyatı belirler.
+
+**Kazanım:**  
+👉 Emir seçimi, **fiyat kontrolü ile gerçekleşme olasılığı** arasındaki tercihtir.
+"""
+        )
+    elif q4:
+        yanlis()
+        st.error("❌ Bu kez olmadı. 1 can kaybettin.")
+        st.info("Piyasa emri daha yüksek gerçekleşme olasılığı sağlar; ancak fiyat kontrolü daha düşüktür.")
+
+st.divider()
+
+# =================================================
+# GÖREV 5
+# =================================================
+st.header("🌊 Seviye 5 — Piyasa Toparlanıyor mu?")
+
+with st.expander("📘 Kavram kartı", expanded=True):
+    st.markdown(
+        """
+**Resiliency**, piyasanın bir işlem veya şoktan sonra ne kadar hızlı normale döndüğünü gösterir.
+
+Örneğin büyük bir satış emri:
+
+- alış emirlerini azaltabilir,
+- spread'i genişletebilir,
+- fiyatı düşürebilir.
+
+Yeni emirler geldikçe piyasa yeniden dengelenir.
+
+**Piyasa hızlı toparlanıyorsa resiliency yüksektir.**
+"""
+    )
+
+q5 = st.radio(
+    "Büyük bir satıştan sonra spread kısa sürede yeniden daralıyor ve alış emirleri geri geliyorsa en uygun yorum hangisidir?",
+    [
+        "Piyasanın resiliency'si yüksektir.",
+        "Piyasa mutlaka sığdır.",
+        "Şirketin temel değeri kesin olarak artmıştır."
+    ],
+    index=None,
+    key="game_q5"
+)
+
+if st.button("🌊 Toparlanmayı Yorumla", key="check5", disabled=st.session_state.q5_done):
+    if q5 == "Piyasanın resiliency'si yüksektir.":
+        bonus = dogru("q5_done", 20)
+        st.success(f"✅ Doğru! +20 puan" + (f" +{bonus} seri bonusu 🔥" if bonus else ""))
+        st.markdown(
+            """
+Piyasa şoktan sonra hızlı biçimde yeniden dengeleniyor.
+
+**Kazanım:**  
+👉 Likidite yalnızca spread ve derinlikten değil, **toparlanma hızından** da oluşur.
+"""
+        )
+    elif q5:
+        yanlis()
+        st.error("❌ Fazla kesin yorum. 1 can kaybettin.")
+        st.info("Burada önemli olan, şoktan sonra piyasanın ne kadar hızlı normale döndüğüdür.")
+
 st.divider()
 
 # =================================================
 # BONUS
 # =================================================
-if tamamlanan == 3:
+if tamamlanan == 5:
     st.header("⭐ Bonus Tur — Piyasa Dedektifi")
 
     st.write(
@@ -336,14 +446,16 @@ else:
 st.subheader(unvan)
 st.write(f"**{st.session_state.takim} skoru: {puan} puan**")
 
-if tamamlanan == 3:
-    st.success("Ana görevlerin tamamlandı.")
+if tamamlanan == 5:
+    st.success("Beş ana görevin tamamlandı.")
     st.markdown(
         """
-### Bugünün 3 ana mesajı
+### Bugünün 5 ana mesajı
 1. **Piyasa derinliği azaldıkça büyük emirlerin fiyat etkisi artabilir.**
 2. **Spread, işlem maliyeti ve likidite hakkında bilgi verir.**
 3. **Her fiyat hareketi yeni bilgi anlamına gelmez.**
+4. **Emir seçimi, fiyat kontrolü ile gerçekleşme olasılığı arasında bir tercihtir.**
+5. **Resiliency, piyasanın bir şoktan sonra ne kadar hızlı toparlandığını gösterir.**
 """
     )
 
